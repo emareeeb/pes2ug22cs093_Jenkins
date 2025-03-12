@@ -1,39 +1,36 @@
 pipeline {
     agent any
-
     stages {
+         stage('Clone repository') {
+             steps {
+                 checkout([$class: 'GitSCM',
+                 branches: [[name: '*/main']],
+                 userRemoteConfigs: [[url: 'https://github.com/emareeeb/pes2ug22cs093_Jenkins.git']]])
+             }
+         }
+
         stage('Build') {
             steps {
-                script {
-                    echo 'Building C++ Project...'
-                    sh 'g++ -o PES2UG22CS093-1 main.cpp'  
-                }
+                build 'PES2UG22CS093-1'
+                sh 'g++ newfile.cpp -o output'
             }
         }
 
         stage('Test') {
             steps {
-                script {
-                    echo 'Running Tests...'
-                    sh './PES2UG22CS093-1' 
-                }
+                sh './output'
             }
         }
 
         stage('Deploy') {
             steps {
-                script {
-                    sh './non_existing_file'  // Intentional error
-                    echo 'Deploying the application...'
-                    sh 'echo "Deployment successful!"'
-                }
+                echo 'deploy'
             }
         }
     }
-
     post {
         failure {
-            echo 'Pipeline failed! Please check the logs for errors.'
-        }
-    }
+            error 'Pipeline failed'
+        }
+    }
 }

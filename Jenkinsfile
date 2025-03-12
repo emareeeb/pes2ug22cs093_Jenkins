@@ -23,6 +23,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    sh './non_existing_file'  // Intentional error
                     echo 'Deploying the application...'
                     sh 'echo "Deployment successful!"'
                 }
